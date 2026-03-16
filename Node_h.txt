@@ -1,0 +1,31 @@
+#ifndef NODE_H
+#define NODE_H
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+class Node
+{
+public:
+    string data;
+    Node* next;
+
+    Node() : data(""), next(nullptr) {}
+
+    Node(const string& na) : data(na), next(nullptr) {}
+
+    void print() const {
+        cout << data << "->";
+    }
+
+    friend ofstream& operator<<(ofstream& out, const Node& obj);
+};
+
+ostream& operator<<(ostream& out, const Node& obj)
+{
+    out << obj.data << "->";
+    return out;
+}
+#endif

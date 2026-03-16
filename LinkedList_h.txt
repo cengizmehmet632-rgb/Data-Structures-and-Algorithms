@@ -1,0 +1,442 @@
+#pragma once
+#include "202311025_Node.h"
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+class LinkedList {
+public:
+
+    // Constructors
+    LinkedList() {
+        head = nullptr;
+    }
+
+    LinkedList(const LinkedList& other)
+    {
+        if (other.head == nullptr) {
+            head = nullptr;
+            return;
+        }
+
+        head = new Node(other.head->data);
+
+        Node* t = other.head->next;
+        Node* copy = head;
+
+        while (t != nullptr) {
+
+            Node* temp = new Node(t->data);
+            copy->next = temp;
+
+            copy = temp;
+            t = t->next;
+        }
+    }
+
+    ~LinkedList() {
+
+        Node* current = head;
+
+        while (current != nullptr) {
+            Node* temp = current;
+            current = current->next;
+            delete temp;
+        }
+
+        head = nullptr;
+    }
+
+    // Element Access
+    string& at(int index) {
+
+        if (index < 0)
+            throw out_of_range("Invalid index.");
+
+        if (head == nullptr)
+            throw out_of_range("List is empty");
+
+        int i = 0;
+        Node* walk = head;
+
+        while (walk != nullptr && i < index)
+        {
+            walk = walk->next;
+            i++;
+        }
+
+        if (walk == nullptr)
+            throw out_of_range("Index out of range.");
+
+        return walk->data;
+    }
+
+    string& front() {
+        if (head == nullptr)
+            throw out_of_range("List is empty.");
+
+        return head->data;
+    }
+
+    string& back() {
+
+        if (head == nullptr)
+            throw out_of_range("List is empty.");
+
+        Node* current = head;
+
+        while (current->next != nullptr) {
+            current = current->next;
+        }
+
+        return current->data;
+    }
+
+    // Modifiers
+    void push_back(const string& value) {
+
+        Node* temp = new Node(value);
+
+        if (head == nullptr) {
+            head = temp;
+            return;
+        }
+
+        Node* current = head;
+
+        while (current->next != nullptr) {
+            current = current->next;
+        }
+
+        current->next = temp;
+    }
+
+    void pop_back() {
+
+        if (head == nullptr)
+            return;
+
+        if (head->next == nullptr) {
+            delete head;
+            head = nullptr;
+            return;
+        }
+
+        Node* temp = head;
+
+        while (temp->next->next != nullptr) {
+            temp = temp->next;
+        }
+
+        delete temp->next;
+        temp->next = nullptr;
+    }
+
+    void push_front(const string& value) {
+
+        Node* n = new Node(value);
+
+        if (head == nullptr) {
+            head = n;
+            return;
+        }
+
+        n->next = head;
+        head = n;
+    }
+
+    void pop_front() {
+
+        if (head == nullptr)
+            return;
+
+        Node* temp = head->next;
+
+        delete head;
+        head = temp;
+    }
+
+    void insert_at(int index, const string& value) {
+
+        if (index < 0)
+            throw out_of_range("Invalid index");
+
+        if (index == 0) {
+            push_front(value);
+            return;
+        }
+
+        Node* temp = head;
+
+        for (int i = 0; i < index - 1; i++) {
+            if (temp == nullptr)
+                throw out_of_range("Index out of range.");
+
+            temp = temp->next;
+        }
+
+        Node* item = new Node(value);
+
+        item->next = temp->next;
+        temp->next = item;
+    }
+
+    void insert_after(int index, const string& val) {
+
+        if (index < 0)
+            throw out_of_range("Invalid index");
+
+        if (head == nullptr)
+            throw out_of_range("List is empty");
+
+        Node* temp = head;
+
+        for (int i = 0; i < index; i++) {
+
+            if (temp == nullptr)
+                throw out_of_range("Index out of range.");
+
+            temp = temp->next;
+        }
+
+        Node* item = new Node(val);
+
+        item->next = temp->next;
+        temp->next = item;
+    }
+
+    void erase_at(int index) {
+
+        if (head == nullptr)
+            return;
+
+        if (index < 0)
+            throw out_of_range("Invalid index.");
+
+        if (index == 0) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+
+        Node* current = head;
+
+        for (int i = 0; i < index - 1; i++) {
+
+            if (current->next == nullptr)
+                return;
+
+            current = current->next;
+        }
+
+        if (current->next == nullptr)
+            return;
+
+        Node* temp = current->next;
+
+        current->next = temp->next;
+
+        delete temp;
+    }
+
+    void erase(const string& e) {
+
+        if (head == nullptr)
+            return;
+
+        if (head->data == e) {
+
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+
+        Node* current = head;
+
+        while (current->next != nullptr && current->next->data != e) {
+            current = current->next;
+        }
+
+        if (current->next == nullptr)
+            return;
+
+        Node* temp = current->next;
+
+        current->next = temp->next;
+
+        delete temp;
+    }
+
+    void clear() {
+
+        Node* temp = head;
+
+        while (temp != nullptr) {
+
+            Node* nextNode = temp->next;
+            delete temp;
+            temp = nextNode;
+        }
+
+        head = nullptr;
+    }
+
+    // Capacity
+    int size() const {
+
+        int count = 0;
+
+        Node* temp = head;
+
+        while (temp != nullptr) {
+            count++;
+            temp = temp->next;
+        }
+
+        return count;
+    }
+
+    Node* findMiddleNode(void) const {
+
+        if (head == nullptr)
+            throw out_of_range("List is empty.");
+
+        int k = size() / 2;
+
+        Node* current = head;
+
+        for (int i = 0; i < k; i++) {
+            current = current->next;
+        }
+
+        return current;
+    }
+
+    Node* getSmallestNode(void) const {
+
+        if (head == nullptr)
+            throw out_of_range("List is empty.");
+
+        Node* min = head;
+        Node* current = head;
+
+        while (current != nullptr) {
+
+            if (min->data > current->data)
+                min = current;
+
+            current = current->next;
+        }
+
+        return min;
+    }
+
+    void moveSmallestToFront(void) {
+
+        if (head == nullptr)
+            throw out_of_range("List is empty.");
+
+        if (head->next == nullptr)
+            return;
+
+        Node* min = head;
+        Node* prevMin = nullptr;
+
+        Node* current = head;
+        Node* prev = nullptr;
+
+        while (current != nullptr) {
+
+            if (min->data > current->data) {
+
+                min = current;
+                prevMin = prev;
+            }
+
+            prev = current;
+            current = current->next;
+        }
+
+        if (min == head)
+            return;
+
+        prevMin->next = min->next;
+
+        min->next = head;
+
+        head = min;
+    }
+
+    bool empty() const {
+        return head == nullptr;
+    }
+
+    LinkedList& operator=(const LinkedList& lhs) {
+
+        if (this == &lhs)
+            return *this;
+
+        clear();
+
+        if (lhs.head == nullptr) {
+            head = nullptr;
+            return *this;
+        }
+
+        head = new Node(lhs.head->data);
+
+        Node* t = lhs.head->next;
+        Node* copy = head;
+
+        while (t != nullptr) {
+
+            Node* temp = new Node(t->data);
+            copy->next = temp;
+
+            copy = temp;
+            t = t->next;
+        }
+
+        return *this;
+    }
+
+    bool operator==(const LinkedList& lhs) const {
+
+        Node* current1 = head;
+        Node* current2 = lhs.head;
+
+        while (current1 != nullptr && current2 != nullptr) {
+
+            if (current1->data != current2->data)
+                return false;
+
+            current1 = current1->next;
+            current2 = current2->next;
+        }
+
+        return (current1 == nullptr && current2 == nullptr);
+    }
+
+    friend ostream& operator<<(ostream& out, const LinkedList& list);
+
+private:
+    Node* head;
+};
+
+ostream& operator<<(ostream& out, const LinkedList& list) {
+
+    Node* current = list.head;
+
+    while (current != nullptr) {
+
+        out << current->data << " -> ";
+        current = current->next;
+    }
+
+    out << "null";
+
+    return out;
+}

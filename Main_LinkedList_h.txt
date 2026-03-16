@@ -1,0 +1,110 @@
+#include "202311025_Node.h"
+#include "202311025_LinkedList_string.h"
+
+int main()
+{
+	LinkedList manage;
+	int index, size;
+	string choice, data;
+	cout << "Welcome to the Linked List Program!" << endl << endl;
+	cout << "Menu:" << endl;
+	cout << "1. Add a element" << endl;
+	cout << "2. Remove an element by value" << endl;
+	cout << "3. Access an element at index" << endl;
+	cout << "4. Insert an element at index" << endl;
+	cout << "5. Insert an element after index" << endl;
+	cout << "6. Remove an element at index" << endl;
+	cout << "7. Print the linked list" << endl;
+	cout << "8. Print the size of the linked list" << endl;
+	cout << "9. Check if the linked list is empty" << endl;
+	cout << "10. Clear the linked list" << endl;
+	cout << "11. Print the middle node" << endl;
+	cout << "12. Print smallest node" << endl;
+	cout << "13. Move smallest node to the front" << endl;
+	cout << "x. Exit" << endl;
+	do
+	{
+		cout << "Enter the choice:";
+		cin >> choice;
+		if (choice == "1")
+		{
+			cout << "Enter the data:";
+			cin >> data;
+			manage.push_back(data);
+		}
+		else if (choice == "2")
+		{
+			cout << "Enter the data:";
+			cin >> data;
+			manage.erase(data);
+		}
+		else if (choice == "3")
+		{
+			cout << "Enter the index:";
+			cin >> index;
+			data = manage.at(index);
+			cout << "Data at the index " << index << ":" << data << endl;
+		}
+		else if (choice == "4")
+		{
+			cout << "Enter the index:";
+			cin >> index;
+			cout << "Enter the data:";
+			cin >> data;
+			manage.insert_at(index, data);
+		}
+		else if (choice == "5")
+		{
+			cout << "Enter the index:";
+			cin >> index;
+			cout << "Enter the data";
+			cin >> data;
+			manage.insert_after(index, data);
+		}
+		else if (choice == "6")
+		{
+			cout << "Enter the index:";
+			cin >> index;
+			manage.erase_at(index);
+		}
+		else if (choice == "7")
+		{
+			cout << manage << endl;
+		}
+		else if (choice == "8")
+		{
+			size = manage.size();
+			cout << "Size of the list:" << size << endl;
+		}
+		else if (choice == "9")
+		{
+			if (manage.empty() == true)
+				cout << "Empty list" << endl;
+			else
+				cout << "The linked list is not empty" << endl;
+		}
+		else if (choice == "10")
+		{
+			manage.clear();
+		}
+		else if (choice == "11")
+		{
+			Node* t = manage.findMiddleNode();
+			cout << "Middle node:";
+			t->print();
+			cout << endl;
+		}
+		else if (choice == "12")
+		{
+			Node* t;
+			t = manage.getSmallestNode();
+			t->print();
+			cout << endl;
+		}
+		else if (choice == "13")
+		{
+			manage.moveSmallestToFront();
+		}
+	} while (choice != "x");
+	return 0;
+}
